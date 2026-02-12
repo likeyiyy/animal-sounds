@@ -7,17 +7,24 @@ import Keyboard from "./components/Keyboard";
 
 export default function Home() {
   const [currentAnimal, setCurrentAnimal] = useState<Animal>(animals[0]);
+  const [autoPlay, setAutoPlay] = useState(true); // 控制是否自动播放
 
   // 键盘事件处理
   const handleKeyPress = useCallback(
     (key: string) => {
       const animal = getAnimalByLetter(key);
       if (animal) {
+        setAutoPlay(true); // 键盘/点击切换时启用自动播放
         setCurrentAnimal(animal);
       }
     },
     []
   );
+
+  // 手动点击播放按钮时禁用自动播放
+  const handleManualPlay = useCallback(() => {
+    setAutoPlay(false);
+  }, []);
 
   // 物理键盘支持
   useEffect(() => {
@@ -48,7 +55,11 @@ export default function Home() {
       <main className="mx-auto max-w-6xl px-4 pb-8">
         {/* 动物展示卡片 */}
         <div className="mb-8">
-          <AnimalCard animal={currentAnimal} />
+          <AnimalCard
+            animal={currentAnimal}
+            autoPlay={autoPlay}
+            onManualPlay={handleManualPlay}
+          />
         </div>
 
         {/* 键盘 */}

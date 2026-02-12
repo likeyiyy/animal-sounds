@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { type Animal } from "../animals";
 
 // 文本转 Base64 文件名
@@ -11,11 +11,13 @@ function textToFilename(text: string): string {
 
 interface AnimalCardProps {
   animal: Animal;
+  autoPlay?: boolean; // 是否自动播放
+  onManualPlay?: () => void; // 手动点击按钮的回调
 }
 
-export default function AnimalCard({ animal }: AnimalCardProps) {
+export default function AnimalCard({ animal, autoPlay = false, onManualPlay }: AnimalCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(-1); // -1 表示未开始
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // 三种声音：中文、英文、叫声
@@ -24,7 +26,6 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
     { type: "English", text: animal.nameEn },
     {
       type: "叫声",
-      // 暂时用 TTS 模拟叫声，后续可替换为真实音效
       text: ({
         "蚂蚁": "吱吱", "熊": "吼吼", "猫": "喵喵", "狗": "汪汪",
         "大象": "呜呜", "青蛙": "呱呱", "长颈鹿": "嗯嗯", "河马": "哼哼",
@@ -38,16 +39,19 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
   ];
 
   // 播放声音
-  const playSound = async () => {
+  const playSound = async (manual = false) => {
     if (isPlaying) return;
+
+    // 手动点击时通知父组件禁用自动播放
+    if (manual && onManualPlay) {
+      onManualPlay();
+    }
 
     try {
       setIsPlaying(true);
-      setCurrentIndex(-1); // 重置进度
+      setCurrentIndex(-1);
 
-      // 依次播放三个声音
       for (let i = 0; i < sounds.length; i++) {
-        // 播放前先更新进度
         setCurrentIndex(i);
 
         const sound = sounds[i];
@@ -62,7 +66,6 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           audioRef.current = audio;
         });
 
-        // 每个声音之间短暂停顿
         if (i < sounds.length - 1) {
           await new Promise(r => setTimeout(r, 400));
         }
@@ -71,10 +74,19 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
       console.error("Error playing sound:", error);
     } finally {
       setIsPlaying(false);
-      // 播放完成后保持最后一个点亮，或者重置
-      // setTimeout(() => setCurrentIndex(-1), 1000);
     }
   };
+
+  // 自动播放（当动物切换时）
+  useEffect(() => {
+    if (autoPlay) {
+      // 短暂延迟确保组件已完全挂载
+      const timer = setTimeout(() => {
+        playSound();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [animal]);
 
   return (
     <>
@@ -90,7 +102,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
               {animal.letter}
             </div>
             <button
-              onClick={playSound}
+              onClick={() => playSound(true)}
               disabled={isPlaying}
               className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-all hover:scale-110 hover:bg-green-600 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
               aria-label="播放声音"
