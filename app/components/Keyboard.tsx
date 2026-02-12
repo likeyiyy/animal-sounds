@@ -9,12 +9,18 @@ interface KeyboardProps {
 }
 
 export default function Keyboard({ animals, onKeyPress, currentLetter }: KeyboardProps) {
-  // 将 A-Z 分成两行
-  const firstRow = animals.slice(0, 13); // A-M
-  const secondRow = animals.slice(13); // N-Z
+  // QWERTY 键盘布局
+  const keyboardRows = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["Z", "X", "C", "V", "B", "N", "M"]
+  ];
 
-  const KeyButton = ({ animal }: { animal: Animal }) => {
-    const isActive = animal.letter === currentLetter;
+  const KeyButton = ({ letter }: { letter: string }) => {
+    const animal = animals.find(a => a.letter === letter);
+    const isActive = animal && animal.letter === currentLetter;
+
+    if (!animal) return null;
 
     return (
       <button
@@ -38,24 +44,18 @@ export default function Keyboard({ animals, onKeyPress, currentLetter }: Keyboar
   };
 
   return (
-    <div className="space-y-4">
-      {/* 第一行 A-M */}
-      <div className="flex flex-wrap justify-center gap-2">
-        {firstRow.map((animal) => (
-          <KeyButton key={animal.letter} animal={animal} />
-        ))}
-      </div>
-
-      {/* 第二行 N-Z */}
-      <div className="flex flex-wrap justify-center gap-2">
-        {secondRow.map((animal) => (
-          <KeyButton key={animal.letter} animal={animal} />
-        ))}
-      </div>
+    <div className="space-y-2">
+      {keyboardRows.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex flex-wrap justify-center gap-2">
+          {row.map((letter) => (
+            <KeyButton key={letter} letter={letter} />
+          ))}
+        </div>
+      ))}
 
       {/* 提示 */}
       <p className="text-center text-sm text-amber-600/70 dark:text-amber-500/70">
-        💡 提示：也可以直接按键盘上的字母键！
+        提示：也可以直接按键盘上的字母键！
       </p>
     </div>
   );
