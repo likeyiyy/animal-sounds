@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎵 动物声音认知
 
-## Getting Started
+一个通过 A-Z 字母学习认识动物和动物声音的儿童启蒙教育应用。
 
-First, run the development server:
+## 功能特点
+
+- **A-Z 字母学习**：每个字母对应一种动物
+- **三重声音学习**：
+  - 🔵 中文名称发音（如：狗）
+  - 🟣 英文名称发音（如：Dog）
+  - 🟢 动物叫声（如：汪汪）
+- **卡通 Emoji 形象**：可爱的动物表情符号
+- **键盘交互**：支持物理键盘和虚拟键盘
+- **响应式设计**：适配各种屏幕尺寸
+- **本地音频**：使用 Edge-TTS 生成的中文语音，加载快速
+
+## 技术栈
+
+- **Next.js 16** - React 框架
+- **TypeScript** - 类型安全
+- **Tailwind CSS** - 样式
+- **Edge-TTS** - 微软 Edge 中文语音合成
+
+## 快速开始
+
+### 1. 安装依赖
+
+```bash
+npm install
+```
+
+### 2. 运行开发服务器
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000) 查看应用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 部署到 Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. 将代码推送到 GitHub
+2. 在 [Vercel](https://vercel.com) 导入项目
+3. 部署完成！
 
-## Learn More
+## 项目结构
 
-To learn more about Next.js, take a look at the following resources:
+```
+animal-sounds/
+├── app/
+│   ├── animals.ts          # 动物数据配置
+│   ├── components/
+│   │   ├── AnimalCard.tsx  # 动物展示卡片
+│   │   └── Keyboard.tsx    # 虚拟键盘
+│   ├── layout.tsx
+│   └── page.tsx            # 主页面
+├── public/
+│   └── audio/             # 预生成的语音文件
+└── next.config.ts          # Next.js 配置
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 动物列表
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 字母 | 动物 | 字母 | 动物 |
+|------|------|------|------|
+| A | 蚂蚁 Ant | N | 夜莺 Nightingale |
+| B | 熊 Bear | O | 猫头鹰 Owl |
+| C | 猫 Cat | P | 熊猫 Panda |
+| D | 狗 Dog | Q | 鹌鹑 Quail |
+| E | 大象 Elephant | R | 兔子 Rabbit |
+| F | 青蛙 Frog | S | 蛇 Snake |
+| G | 长颈鹿 Giraffe | T | 老虎 Tiger |
+| H | 河马 Hippo | U | 独角兽 Unicorn |
+| I | 鬣蜥 Iguana | V | 秃鹫 Vulture |
+| J | 水母 Jellyfish | W | 鲸鱼 Whale |
+| K | 袋鼠 Kangaroo | X | X射线鱼 X-ray Fish |
+| L | 狮子 Lion | Y | 牦牛 Yak |
+| M | 猴子 Monkey | Z | 斑马 Zebra |
